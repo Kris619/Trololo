@@ -68,14 +68,14 @@ SDL_Surface *load_image(const char *file)
 	return screen_format;
 }
 
-void apply_image(int x, int y, SDL_Surface* source, SDL_Surface* destination)
+void apply_image(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL)
 {
 	SDL_Rect pos;
 	
 	pos.x = x;
 	pos.y = y;
 	
-	SDL_BlitSurface(source, NULL, destination, &pos);
+	SDL_BlitSurface(source, clip, destination, &pos);
 }
 
 // Removes color from an image.

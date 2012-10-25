@@ -10,18 +10,20 @@
 // Screen
 SDL_Surface *screen = NULL;
 
-// Images
 SDL_Surface *background = NULL;
-SDL_Surface *troll = NULL;
+SDL_Surface *characters = NULL;
 
 // Image filenames
-const char *background_image = "whitehouse.bmp";
-const char *troll_image = "troll.bmp";
+const char *background_image = "stage1.bmp";
+const char *characters_image = "characters.bmp";
+
+// Char
+SDL_Rect clip[2];
 
 
 int main(int argc, char* args[])
 {					
-	screen = StartUp(WINDOW_TITLE,678,678);
+	screen = StartUp(WINDOW_TITLE, 900, 675);
 
 	if(screen == NULL)
 	{
@@ -32,14 +34,31 @@ int main(int argc, char* args[])
 	{
 		// Load images
 		background = load_image(background_image);
-		troll = load_image(troll_image);
+		characters = load_image(characters_image);
 		
-		// Remove the background (green) of the troll
-		RemoveColor(troll, 0x00,0xFF,0x00);
+		// The troll's coordinates 
+		clip[0].x = 0;
+		clip[0].y = 0;
+		clip[0].w = 200;
+		clip[0].h = 160;
 		
-		// Blit
+		// The codfish's coordinates
+		clip[1].x = 0;
+		clip[1].y = 160;
+		clip[1].w = 200;
+		clip[1].h = 100;
+		
+		// Remove the background from the characters
+		RemoveColor(characters, 0x00, 0xFF, 0x00); // Green
+		
+		// Blit background image
 		apply_image(0, 0, background, screen);
-		apply_image(0, 0, troll, screen);
+		
+		// Blit troll image
+		apply_image(0, 0, characters, screen, &clip[0]);
+		
+		// Blit codfish image
+		apply_image(300, 300, characters, screen, &clip[1]);
 		
 		if(screen != NULL)
 			SDL_Flip(screen);
