@@ -1,6 +1,7 @@
 // SDL + Extensions
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
+#include "SDL/SDL_ttf.h"
 
 // Standard
 #include <cstdio>
@@ -37,7 +38,14 @@ SDL_Surface *StartUp(const char *title, int x, int y)
 		return NULL;
 	}
 	
-	SDL_WM_SetCaption(title, NULL );
+	SDL_WM_SetCaption(title, NULL);
+	
+	//Initialize SDL_ttf 
+	if(TTF_Init() == -1)
+	{
+		fprintf(stderr, "True Type Font initialization failed: %s", SDL_GetError());
+		return NULL;
+	}
 	
 	// Success: return video surface
 	return screen;

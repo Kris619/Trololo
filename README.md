@@ -2,7 +2,7 @@
 I'm building this while learning from [Lazy Foo' Productions' SDL Tutorials](http://lazyfoo.net/SDL_tutorials/). 
 
 ## About
-Trololo is written in C++ with SDL 1.2.12 (32 bit) with the SDL extension library: SDL_image (1.2.12).
+Trololo is written in C++ with SDL 1.2.15 (32 bit) with the SDL extension libraries: SDL_image (1.2.12) and SDL_tff (2.0.11).
 
 ## License
 This software is released under the GNU General Public License Version 3. Please read the LICENSE file to know your rights before continuing. 

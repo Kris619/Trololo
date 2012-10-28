@@ -1,6 +1,7 @@
 // SDL + Extensions
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
+#include "SDL/SDL_ttf.h"
 
 // Common SDL functions for general processing.
 #include "commonSDL.h"
@@ -12,6 +13,8 @@ SDL_Surface *screen = NULL;
 
 SDL_Surface *background = NULL;
 SDL_Surface *characters = NULL;
+
+SDL_Surface *message = NULL;
 
 // Image filenames
 const char *background_image = "stage1.bmp";
@@ -55,10 +58,37 @@ int main(int argc, char* args[])
 		apply_image(0, 0, background, screen);
 		
 		// Blit troll image
-		apply_image(0, 0, characters, screen, &clip[0]);
+		apply_image(700, 40, characters, screen, &clip[0]);
 		
 		// Blit codfish image
-		apply_image(300, 300, characters, screen, &clip[1]);
+		apply_image(150, 300, characters, screen, &clip[1]);
+
+		// Setup welcome text
+		SDL_Color whitecolor = { 255, 255, 255 };
+		TTF_Font *font = TTF_OpenFont("CaviarDreams.ttf", 80);
+		const char* text = "Welcome to Trololo";
+		
+		
+		if(!font)
+		{
+			fprintf(stderr, "TTF_OpenFont: %s\n", TTF_GetError());
+		}
+		
+		/*
+			Checks if font or text is NULL due to the documentation:
+				NULL font into this function will cause a segfault.
+				NULL text into this function will result in undefined behavior.
+		*/
+		if(font != NULL && text != NULL)
+			message = TTF_RenderText_Solid(font, text, whitecolor);
+		else
+			fprintf(stderr, "TFF Render Text Solid Error: init error\n");
+		
+		// Apply message
+		if(message != NULL)
+			apply_image(100, 200, message, screen);
+		else
+			fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
 		
 		if(screen != NULL)
 			SDL_Flip(screen);
