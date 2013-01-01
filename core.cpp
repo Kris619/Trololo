@@ -61,7 +61,7 @@ namespace scrnfunk
 namespace scrns
 {
 	// Returns 1 (true) on success, 0 (false) on error.
-	bool initiateSDL(SDL_Surface *screen, int x, int y)
+	SDL_Surface * initiateSDL(SDL_Surface *screen, int x, int y)
 	{
 		SDL_Surface *vid_init;
 		int init, ttf_ret;
@@ -71,7 +71,7 @@ namespace scrns
 		if(init < 0)
 		{
 			fprintf(stderr, "Unable to initiate SDL: %s\n", SDL_GetError());
-			return false;
+			return NULL;
 		}
 
 		
@@ -80,18 +80,17 @@ namespace scrns
 		if(vid_init == 0)
 		{
 		    fprintf(stderr, "Video initialization failed: %s", SDL_GetError());
-		    return false;
+		    return NULL;
 		}
 
 
 		// Get video surface and check
 		screen = SDL_GetVideoSurface();
-		if(screen == 0)
+		if(screen == NULL)
 		{
 		    fprintf(stderr, "Failed to get video surface: %s", SDL_GetError());
-		    return false;
+		    return NULL;
 		}
-
 
 		// Set window title
 		SDL_WM_SetCaption(WINDOW_TITLE, 0);
@@ -102,11 +101,11 @@ namespace scrns
 		if(ttf_ret == -1)
 		{
 		    fprintf(stderr, "True Type Font initialization failed: %s", SDL_GetError());
-		    return false;
+		    return NULL;
 		}
 
-		// Success: return video surface
-		return true;
+		// Success
+		return screen;
 	}
 
 	SDL_Surface * MainMenu()
@@ -125,10 +124,10 @@ namespace scrns
 
 		// Char
 		SDL_Rect clip[2];
+		
+		screen = initiateSDL(screen, 900, 675);
 
-		initiateSDL(screen, 900, 675);
-
-		if(screen == 0)
+		if(screen == NULL)
 		{
 			fprintf(stderr, "Start up failure.\n");
 			return NULL;
@@ -199,4 +198,3 @@ namespace scrns
 		return screen;
 	}
 }
-

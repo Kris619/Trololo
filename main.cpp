@@ -8,7 +8,10 @@ int main(int argc, char* args[])
 	SDL_Surface *screen;
 	
 	screen = scrns::MainMenu();
-		
+
+	if(screen == NULL)
+		return 1;
+	  
 	// Check if user quit
 	while(quit == 1)
 	{

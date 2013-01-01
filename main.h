@@ -11,7 +11,7 @@
 
 namespace scrns
 {
-	bool initiateSDL(SDL_Surface *screen, int x, int y);
+	SDL_Surface * initiateSDL(SDL_Surface *screen, int x, int y);
 	SDL_Surface * MainMenu();
 }
 
