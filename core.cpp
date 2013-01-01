@@ -27,7 +27,7 @@ namespace scrnfunk
 		return screen_format;
 	}
 	
-	void apply_image(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = 0)
+	void apply_image(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip)
 	{
 		SDL_Rect pos;
 
@@ -71,7 +71,7 @@ namespace scrns
 		if(init < 0)
 		{
 			fprintf(stderr, "Unable to initiate SDL: %s\n", SDL_GetError());
-		    return false;
+			return false;
 		}
 
 		
