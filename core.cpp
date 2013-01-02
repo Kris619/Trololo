@@ -93,7 +93,7 @@ namespace scrns
 		}
 
 		// Set window title
-		SDL_WM_SetCaption(WINDOW_TITLE, 0);
+		SDL_WM_SetCaption(WINDOW_TITLE " " VERSION, 0);
 
 
 		// Initialize SDL_ttf and check
@@ -119,8 +119,8 @@ namespace scrns
 
 
 		// Image filenames
-		const char *background_image = "stage1.bmp";
-		const char *characters_image = "characters.bmp";
+		const char *background_image = "bin/stage1.bmp";
+		const char *characters_image = "bin/characters.bmp";
 
 		// Char
 		SDL_Rect clip[2];
@@ -164,7 +164,7 @@ namespace scrns
 
 			// Setup welcome text
 			SDL_Color whitecolor = { 255, 255, 255 };
-			TTF_Font *font = TTF_OpenFont("CaviarDreams.ttf", 80);
+			TTF_Font *font = TTF_OpenFont("bin/CaviarDreams.ttf", 80);
 			const char* text = "Welcome to Trololo";
 		
 		

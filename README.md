@@ -7,8 +7,10 @@ Trololo is written in C++ with SDL 1.2.15 (32 bit) with the SDL extension librar
 ## License
 This software is released under the GNU General Public License Version 3. Please read the LICENSE file to know your rights before continuing. 
 
-## Support
-* Windows 7 Home Premium 64 bit (Service Pack 1) (g++ 4.7.0)
+## System Support 
+* Windows 7 Home Premium x86_64 (Service Pack 1) (g++ 4.7.0)
+* Linux 3.2 Debian 6.0 x86_64 (g++ 4.4.5)
 
 ## Current State
-This software doesn't do much yet. Nothing is guaranteed to compile but most of the time it should. Binary links will be added in future stable updates on the [latest readme on github](https://github.com/Kris619/Trololo/).
+This software doesn't do much yet. Nothing is guaranteed to compile but most of the time it should. Binary links will be added in future stable 
+updates on the [latest readme on github](https://github.com/Kris619/Trololo/).

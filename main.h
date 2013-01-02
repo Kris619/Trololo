@@ -22,7 +22,7 @@ namespace scrnfunk
 	bool RemoveColor(SDL_Surface* image, Uint8 R, Uint8 G, Uint8);
 }
 
-#define VERSION 0.1-alpha
+#define VERSION "0.1-alpha"
 #define WINDOW_TITLE "Trololo"
 
 #endif
