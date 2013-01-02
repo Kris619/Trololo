@@ -2,9 +2,9 @@
 ##################
 *.exe
 
-# Binary #
-##########
-/bin
+# Linux Binary #
+################
+Trololo
 
 # Windows scripts #
 ###################
