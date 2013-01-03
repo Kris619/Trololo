@@ -56,8 +56,6 @@ namespace scrnfunk
 }
 
 
-
-
 namespace scrns
 {
 	// Returns 1 (true) on success, 0 (false) on error.
@@ -121,6 +119,7 @@ namespace scrns
 		// Image filenames
 		const char *background_image = "bin/stage1.bmp";
 		const char *characters_image = "bin/characters.bmp";
+		//const char *indicator_image = "bin/indicator.bmp";
 
 		// Char
 		SDL_Rect clip[2];
@@ -162,33 +161,66 @@ namespace scrns
 			// Blit codfish image
 			scrnfunk::apply_image(150, 300, characters, screen, &clip[1]);
 
-			// Setup welcome text
-			SDL_Color whitecolor = { 255, 255, 255 };
+			// Open font at title size.
 			TTF_Font *font = TTF_OpenFont("bin/CaviarDreams.ttf", 80);
-			const char* text = "Welcome to Trololo";
 		
 		
 			if(!font)
 			{
 				fprintf(stderr, "TTF_OpenFont: %s\n", TTF_GetError());
+				return NULL;
 			}
-		
-			/*
-					Checks if font or text is 0 due to the documentation:
-					0 font into this function will cause a segfault.
-					0 text into this function will result in undefined behavior.
-			*/
-			if(font != 0 && text != 0)
-				message = TTF_RenderText_Solid(font, text, whitecolor);
+
+			// Setup Title text
+			const char* title_text = "Welcome to Trololo";
+			SDL_Color whitecolor = { 255, 255, 255 };
+			
+			// Get Title text render
+			if(font != 0 && title_text != 0) // 0 into the text or font causes segfaults and undefined behavior
+				message = TTF_RenderText_Solid(font, title_text, whitecolor);
 			else
 				fprintf(stderr, "TFF Render Text Solid Error: init error\n");
-		
-			// Apply message
+			
+			// Apply Title text render
 			if(message != 0)
 				scrnfunk::apply_image(100, 200, message, screen);
 			else
 				fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
+			
+			// Setup option 1 (New game)
+			const char* option1_text = "New game";
+			SDL_Color blackcolor = { 0,0,0 };
+			font = TTF_OpenFont("bin/CaviarDreams.ttf", 55); // reopen to resize
+			
+			// Apply option 1 (New game)
+			if(font != 0 && option1_text != 0)
+				message = TTF_RenderText_Solid(font, option1_text, blackcolor);
+			else
+				fprintf(stderr, "TFF Render Text Solid Error: init error\n");
 		
+			// Apply message option 1 (New game)
+			if(message != 0)
+				scrnfunk::apply_image(620, 300, message, screen);
+			else
+				fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
+			
+			// Setup exit option (Exit)
+			const char* exit_text = "Exit";
+			font = TTF_OpenFont("bin/CaviarDreams.ttf", 55); // reopen to resize
+			
+			// Apply exit option (Exit)
+			if(font != 0 && option1_text != 0)
+				message = TTF_RenderText_Solid(font, exit_text, blackcolor);
+			else
+				fprintf(stderr, "TFF Render Text Solid Error: init error\n");
+		
+			// Apply exit option (Exit)
+			if(message != 0)
+				scrnfunk::apply_image(620, 370, message, screen);
+			else
+				fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
+		
+			// Update screen with all applied images
 			if(screen != 0)
 				SDL_Flip(screen);
 			else

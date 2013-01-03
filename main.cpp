@@ -6,7 +6,6 @@ int main(int argc, char* args[])
 	int quit = 1;
 
 	SDL_Surface *screen;
-	
 	screen = scrns::MainMenu();
 
 	if(screen == NULL)
