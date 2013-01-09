@@ -7,12 +7,14 @@
 #include "SDL/SDL_ttf.h" // SDL_tff (2.0.11)
 
 // Standard dependencies
+#include <iostream>
 #include <cstdio>
 
 namespace scrns
 {
 	SDL_Surface * initiateSDL(SDL_Surface *screen, int x, int y);
 	SDL_Surface * MainMenu();
+	int MainMenu_survey();
 }
 
 namespace scrnfunk

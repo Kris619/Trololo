@@ -1,26 +1,24 @@
 #include "main.h"
 
+using namespace std;
+
 int main(int argc, char* args[])
-{					
-	SDL_Event event;
-	int quit = 1;
-
+{
 	SDL_Surface *screen;
+	int menu_option = -1;
+	
 	screen = scrns::MainMenu();
-
-	if(screen == NULL)
-		return 1;
-	  
-	// Check if user quit
-	while(quit == 1)
-	{
-		while(SDL_PollEvent(&event))
-		{
-			if(event.type == SDL_QUIT)
-				quit = 0;
+	
+	while(menu_option == -1)
+	{  
+		menu_option = scrns::MainMenu_survey();
+		
+		if(menu_option == 1)
+		{ 
+			cout << "Starting new game..." << endl;
 		}
 	}
-
+	
+	SDL_FreeSurface(screen);
 	return 0;
 }
-

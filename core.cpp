@@ -1,5 +1,7 @@
 #include "main.h"
 
+using namespace std;
+
 namespace scrnfunk
 {
 	// Optimize image on load to reduce processing.
@@ -58,7 +60,7 @@ namespace scrnfunk
 
 namespace scrns
 {
-	// Returns 1 (true) on success, 0 (false) on error.
+	// Returns a pointer on success, NULL on an error
 	SDL_Surface * initiateSDL(SDL_Surface *screen, int x, int y)
 	{
 		SDL_Surface *vid_init;
@@ -101,6 +103,8 @@ namespace scrns
 		    fprintf(stderr, "True Type Font initialization failed: %s", SDL_GetError());
 		    return NULL;
 		}
+		
+		SDL_FreeSurface(vid_init);
 
 		// Success
 		return screen;
@@ -109,17 +113,17 @@ namespace scrns
 	SDL_Surface * MainMenu()
 	{
 		// Screen
-		SDL_Surface *screen = 0;
+		SDL_Surface *screen = NULL;
 
-		SDL_Surface *background = 0;
-		SDL_Surface *characters = 0;
-		SDL_Surface *message = 0;
-
+		SDL_Surface *background = NULL;
+		SDL_Surface *characters = NULL;
+		SDL_Surface *message = NULL;
+		SDL_Surface *indicator = NULL;
 
 		// Image filenames
 		const char *background_image = "bin/stage1.bmp";
 		const char *characters_image = "bin/characters.bmp";
-		//const char *indicator_image = "bin/indicator.bmp";
+		const char *indicator_image = "bin/indicator.bmp";
 
 		// Char
 		SDL_Rect clip[2];
@@ -136,6 +140,7 @@ namespace scrns
 			// Load images
 			background = scrnfunk::load_image(background_image);
 			characters = scrnfunk::load_image(characters_image);
+			indicator = scrnfunk::load_image(indicator_image);
 		
 			// The troll's coordinates 
 			clip[0].x = 0;
@@ -219,14 +224,97 @@ namespace scrns
 				scrnfunk::apply_image(620, 370, message, screen);
 			else
 				fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
+			
+			// Remove white around the indicator image
+			scrnfunk::RemoveColor(indicator, 0xFF, 0xFF, 0xFF); // white
+			
+			// Apply starting point of indicator
+			scrnfunk::apply_image(550, 306, indicator, screen);
 		
 			// Update screen with all applied images
 			if(screen != 0)
 				SDL_Flip(screen);
 			else
 				fprintf(stderr, "Couldn't update screen.\n");
+			
+			// Free old surfaces
+			SDL_FreeSurface(background);
+			SDL_FreeSurface(characters);
+			SDL_FreeSurface(message);
+			SDL_FreeSurface(indicator);
 		}
 	
 		return screen;
 	}
+
+	int MainMenu_survey()
+	{
+		// Return values
+		// 0 -- User wants to quit
+		// 1 -- User wants option 1
+		// 2 -- User wants option 2
+		// -1 -- No input
+		
+		SDL_Event event;
+		int current, menu_option;
+		bool option_wanted = false;
+		
+		current = menu_option = 1;
+		
+		while(SDL_PollEvent(&event))
+		{
+			if(event.type == SDL_QUIT)
+				return 0;
+			
+			else if(event.type == SDL_KEYDOWN)
+			{
+			  
+				if(event.key.keysym.sym == 274) // down arrow key
+				{
+					if(menu_option < 2) // Less than the max amount of options
+						menu_option++;
+					
+					cout << "Down Key, menu_option: " << menu_option << endl;
+				}
+				
+				else if(event.key.keysym.sym == 273) // up arrow key
+				{
+					if(menu_option > 1)
+						menu_option--;
+					
+					cout << "Up Key, menu_option: " << menu_option << endl; // debugline
+				}
+				
+				else if(event.key.keysym.sym == 13) // enter key
+					option_wanted = true;
+			}
+
+			
+			
+			if(menu_option != current)
+			{
+				switch(menu_option)
+				{
+					case 1:
+						cout << "Case 1 ::: Menu should change to: " << menu_option << endl; // debugline
+					case 2:
+						cout << "Case 2 ::: Menu should change to: " << menu_option << endl; // debugline
+				}
+				current = menu_option;
+			}
+			
+			else if(option_wanted)
+				return menu_option;
+			
+		}
+		
+		return -1;
+	}
+
+
+
+
+
+
+
 }
