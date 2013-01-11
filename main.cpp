@@ -5,18 +5,27 @@ using namespace std;
 int main(int argc, char* args[])
 {
 	SDL_Surface *screen;
-	int menu_option = -1;
 	
+	// Display main menu
 	screen = scrns::MainMenu();
 	
-	while(menu_option == -1)
-	{  
-		menu_option = scrns::MainMenu_survey();
-		
-		if(menu_option == 1)
-		{ 
+	// Main menu option return
+	int menu_option;
+	
+	menu_option = scrns::MainMenu_survey();
+	
+	switch(menu_option)
+	{
+		case 1:
+			// User wants to start a new game
 			cout << "Starting new game..." << endl;
-		}
+			break;
+		case 2:
+			// User wants to exit the game
+			break;
+		default:
+			cout << "Fatal Error: Main Menu option given was unknown." << endl;
+		
 	}
 	
 	SDL_FreeSurface(screen);

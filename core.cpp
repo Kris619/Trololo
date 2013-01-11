@@ -250,71 +250,72 @@ namespace scrns
 	int MainMenu_survey()
 	{
 		// Return values
-		// 0 -- User wants to quit
-		// 1 -- User wants option 1
-		// 2 -- User wants option 2
-		// -1 -- No input
-		
+		// 1 -- User wants option 1 (start new game)
+		// 2 -- User wants to quit
+
 		SDL_Event event;
-		int current, menu_option;
+		
+		int menu_option, current;
+		menu_option = current = 1;
+
 		bool option_wanted = false;
 		
-		current = menu_option = 1;
 		
-		while(SDL_PollEvent(&event))
+		while(!option_wanted)
 		{
-			if(event.type == SDL_QUIT)
-				return 0;
-			
-			else if(event.type == SDL_KEYDOWN)
+			while(SDL_PollEvent(&event))
 			{
 			  
-				if(event.key.keysym.sym == 274) // down arrow key
-				{
-					if(menu_option < 2) // Less than the max amount of options
-						menu_option++;
-					
-					cout << "Down Key, menu_option: " << menu_option << endl;
-				}
+				if(event.type == SDL_QUIT)
+					return 2;
 				
-				else if(event.key.keysym.sym == 273) // up arrow key
+				else if(event.type == SDL_KEYDOWN)
 				{
-					if(menu_option > 1)
-						menu_option--;
+				  
+					if(event.key.keysym.sym == 274) // down arrow key
+					{
+						if(menu_option < 2) // Less than the max amount of options
+							menu_option++;
+						
+						//cout << "INPUT ::: DOWN KEY, menu_option: " << menu_option << "; current: " << current << endl; // debugline
+					}
 					
-					cout << "Up Key, menu_option: " << menu_option << endl; // debugline
+					else if(event.key.keysym.sym == 273) // up arrow key
+					{
+						if(menu_option > 1)
+							menu_option--;
+						
+						//cout << "INPUT ::: UP KEY, menu_option: " << menu_option << "; current: " << current << endl; // debugline
+					}
+					
+					else if(event.key.keysym.sym == 13) // enter key
+						option_wanted = true;
 				}
-				
-				else if(event.key.keysym.sym == 13) // enter key
-					option_wanted = true;
-			}
 
-			
-			
-			if(menu_option != current)
-			{
-				switch(menu_option)
+				
+				
+				if(menu_option != current)
 				{
-					case 1:
-						cout << "Case 1 ::: Menu should change to: " << menu_option << endl; // debugline
-					case 2:
-						cout << "Case 2 ::: Menu should change to: " << menu_option << endl; // debugline
+					current = menu_option;
+					
+					switch(menu_option)
+					{
+						case 1:
+							//cout << "Case 1 ::: Menu should change.  menu_option: " << menu_option << "; current: " << current << endl; // debugline
+							break;
+						case 2:
+							//cout << "Case 2 ::: Menu should change.  menu_option: " << menu_option << "; current: " << current << endl; // debugline
+							break;
+						default:
+							cout << "Error: MainMenu_survey didn't update correctly." << endl;
+							break;
+					}
 				}
-				current = menu_option;
 			}
-			
-			else if(option_wanted)
-				return menu_option;
-			
 		}
 		
-		return -1;
+		return menu_option;
 	}
-
-
-
-
-
 
 
 }
