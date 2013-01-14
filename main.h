@@ -12,9 +12,9 @@
 
 namespace scrns
 {
-	SDL_Surface * initiateSDL(SDL_Surface *screen, int x, int y);
+	SDL_Surface * initiateSDL(int x, int y);
 	SDL_Surface * MainMenu();
-	int MainMenu_survey();
+	SDL_Surface * MainMenu_survey(SDL_Surface *screen);
 }
 
 namespace scrnfunk

@@ -61,8 +61,9 @@ namespace scrnfunk
 namespace scrns
 {
 	// Returns a pointer on success, NULL on an error
-	SDL_Surface * initiateSDL(SDL_Surface *screen, int x, int y)
+	SDL_Surface *initiateSDL(int x, int y)
 	{
+		SDL_Surface *screen = NULL;
 		SDL_Surface *vid_init;
 		int init, ttf_ret;
 	
@@ -110,7 +111,7 @@ namespace scrns
 		return screen;
 	}
 
-	SDL_Surface * MainMenu()
+	SDL_Surface *MainMenu()
 	{
 		// Screen
 		SDL_Surface *screen = NULL;
@@ -128,7 +129,7 @@ namespace scrns
 		// Char
 		SDL_Rect clip[2];
 		
-		screen = initiateSDL(screen, 900, 675);
+		screen = initiateSDL(900, 675);
 
 		if(screen == NULL)
 		{
@@ -247,7 +248,7 @@ namespace scrns
 		return screen;
 	}
 
-	int MainMenu_survey()
+	SDL_Surface *MainMenu_survey(SDL_Surface *screen)
 	{
 		// Return values
 		// 1 -- User wants option 1 (start new game)
@@ -260,6 +261,33 @@ namespace scrns
 
 		bool option_wanted = false;
 		
+		SDL_Surface *background = NULL;
+		SDL_Surface *indicator = NULL;
+
+		// Image filenames
+		const char *background_image = "bin/stage1.bmp";
+		const char *indicator_image = "bin/indicator.bmp";
+		
+		background = scrnfunk::load_image(background_image);
+		indicator = scrnfunk::load_image(indicator_image);
+		
+		// Remove white around the indicator image
+		scrnfunk::RemoveColor(indicator, 0xFF, 0xFF, 0xFF); // white
+		
+		// Background clipping points
+		SDL_Rect clip[2];
+		
+		// Cover points on the background for option 1
+		clip[0].x = 550;
+		clip[0].y = 306;
+		clip[0].w = 48;
+		clip[0].h = 48;
+		
+		// Cover points on the background for option 2
+		clip[1].x = 550;
+		clip[1].y = 375;
+		clip[1].w = 48;
+		clip[1].h = 48;
 		
 		while(!option_wanted)
 		{
@@ -267,7 +295,7 @@ namespace scrns
 			{
 			  
 				if(event.type == SDL_QUIT)
-					return 2;
+					return NULL;
 				
 				else if(event.type == SDL_KEYDOWN)
 				{
@@ -276,16 +304,12 @@ namespace scrns
 					{
 						if(menu_option < 2) // Less than the max amount of options
 							menu_option++;
-						
-						//cout << "INPUT ::: DOWN KEY, menu_option: " << menu_option << "; current: " << current << endl; // debugline
 					}
 					
 					else if(event.key.keysym.sym == 273) // up arrow key
 					{
 						if(menu_option > 1)
 							menu_option--;
-						
-						//cout << "INPUT ::: UP KEY, menu_option: " << menu_option << "; current: " << current << endl; // debugline
 					}
 					
 					else if(event.key.keysym.sym == 13) // enter key
@@ -301,20 +325,44 @@ namespace scrns
 					switch(menu_option)
 					{
 						case 1:
-							//cout << "Case 1 ::: Menu should change.  menu_option: " << menu_option << "; current: " << current << endl; // debugline
+							scrnfunk::apply_image(550, 306, indicator, screen); // Indicator on option 1
+							scrnfunk::apply_image(550, 375, background, screen, &clip[1]); // Cover option 2
 							break;
 						case 2:
-							//cout << "Case 2 ::: Menu should change.  menu_option: " << menu_option << "; current: " << current << endl; // debugline
+							scrnfunk::apply_image(550, 375, indicator, screen); // Indicator on option 2
+							scrnfunk::apply_image(550, 306, background, screen, &clip[0]); // Cover option 1
 							break;
 						default:
 							cout << "Error: MainMenu_survey didn't update correctly." << endl;
 							break;
 					}
+					
+							
+					if(screen != 0)
+						SDL_Flip(screen);
+					else
+						fprintf(stderr, "Couldn't update screen.\n");
 				}
 			}
 		}
 		
-		return menu_option;
+			
+		switch(menu_option)
+		{
+			case 1:
+				// User wants to start a new game
+				cout << "Starting new game..." << endl;
+				break;
+			case 2:
+				// User wants to exit the game
+				cout << "Exiting..." << endl;
+				break;
+			default:
+				cout << "Fatal Error: Main Menu option given was unknown." << endl;
+			
+		}
+		
+		return screen;
 	}
 
 
