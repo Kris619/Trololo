@@ -4,7 +4,7 @@
 // SDL dependencies
 #include "SDL/SDL.h" // SDL 1.2.15 (32 bit)
 #include "SDL/SDL_image.h" // SDL_image (1.2.12)
-#include "SDL/SDL_ttf.h" // SDL_tff (2.0.11)
+//#include "SDL/SDL_ttf.h" // SDL_tff (2.0.11)
 
 // Standard dependencies
 #include <iostream>
@@ -13,8 +13,8 @@
 namespace scrns
 {
 	SDL_Surface * initiateSDL(int x, int y);
-	SDL_Surface * MainMenu();
-	SDL_Surface * MainMenu_survey(SDL_Surface *screen);
+	SDL_Surface * Stage1();
+	SDL_Surface * Movement(SDL_Surface *screen);
 }
 
 namespace scrnfunk
@@ -25,6 +25,6 @@ namespace scrnfunk
 }
 
 #define VERSION "0.1-alpha"
-#define WINDOW_TITLE "Trololo"
+#define WINDOW_TITLE "Mario"
 
 #endif

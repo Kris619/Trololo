@@ -65,7 +65,7 @@ namespace scrns
 	{
 		SDL_Surface *screen = NULL;
 		SDL_Surface *vid_init;
-		int init, ttf_ret;
+		int init;//, ttf_ret;
 	
 		// Initiate SDL and check
 		init = SDL_Init(SDL_INIT_VIDEO);
@@ -96,7 +96,7 @@ namespace scrns
 		// Set window title
 		SDL_WM_SetCaption(WINDOW_TITLE " " VERSION, 0);
 
-
+		/*
 		// Initialize SDL_ttf and check
 		ttf_ret = TTF_Init();
 		if(ttf_ret == -1)
@@ -104,6 +104,7 @@ namespace scrns
 		    fprintf(stderr, "True Type Font initialization failed: %s", SDL_GetError());
 		    return NULL;
 		}
+		*/
 		
 		SDL_FreeSurface(vid_init);
 
@@ -111,25 +112,21 @@ namespace scrns
 		return screen;
 	}
 
-	SDL_Surface *MainMenu()
+	/*SDL_Surface *MainMenu()
+	{
+		
+	}*/
+	
+	SDL_Surface *Stage1()
 	{
 		// Screen
 		SDL_Surface *screen = NULL;
-
 		SDL_Surface *background = NULL;
-		SDL_Surface *characters = NULL;
-		SDL_Surface *message = NULL;
-		SDL_Surface *indicator = NULL;
 
 		// Image filenames
-		const char *background_image = "bin/stage1.bmp";
-		const char *characters_image = "bin/characters.bmp";
-		const char *indicator_image = "bin/indicator.bmp";
-
-		// Char
-		SDL_Rect clip[2];
+		const char *background_image = "bin/stage.bmp";
 		
-		screen = initiateSDL(900, 675);
+		screen = initiateSDL(900, 646);
 
 		if(screen == NULL)
 		{
@@ -140,230 +137,109 @@ namespace scrns
 		{
 			// Load images
 			background = scrnfunk::load_image(background_image);
-			characters = scrnfunk::load_image(characters_image);
-			indicator = scrnfunk::load_image(indicator_image);
-		
-			// The troll's coordinates 
-			clip[0].x = 0;
-			clip[0].y = 0;
-			clip[0].w = 200;
-			clip[0].h = 160;
-		
-			// The codfish's coordinates
-			clip[1].x = 0;
-			clip[1].y = 160;
-			clip[1].w = 200;
-			clip[1].h = 100;
-		
-			// Remove the background from the characters
-			scrnfunk::RemoveColor(characters, 0x00, 0xFF, 0x00); // Green
-		
+
 			// Blit background image
 			scrnfunk::apply_image(0, 0, background, screen);
-		
-			// Blit troll image
-			scrnfunk::apply_image(700, 40, characters, screen, &clip[0]);
-		
-			// Blit codfish image
-			scrnfunk::apply_image(150, 300, characters, screen, &clip[1]);
 
-			// Open font at title size.
-			TTF_Font *font = TTF_OpenFont("bin/CaviarDreams.ttf", 80);
-		
-		
-			if(!font)
-			{
-				fprintf(stderr, "TTF_OpenFont: %s\n", TTF_GetError());
-				return NULL;
-			}
-
-			// Setup Title text
-			const char* title_text = "Welcome to Trololo";
-			SDL_Color whitecolor = { 255, 255, 255 };
-			
-			// Get Title text render
-			if(font != 0 && title_text != 0) // 0 into the text or font causes segfaults and undefined behavior
-				message = TTF_RenderText_Solid(font, title_text, whitecolor);
-			else
-				fprintf(stderr, "TFF Render Text Solid Error: init error\n");
-			
-			// Apply Title text render
-			if(message != 0)
-				scrnfunk::apply_image(100, 200, message, screen);
-			else
-				fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
-			
-			// Setup option 1 (New game)
-			const char* option1_text = "New game";
-			SDL_Color blackcolor = { 0,0,0 };
-			font = TTF_OpenFont("bin/CaviarDreams.ttf", 55); // reopen to resize
-			
-			// Apply option 1 (New game)
-			if(font != 0 && option1_text != 0)
-				message = TTF_RenderText_Solid(font, option1_text, blackcolor);
-			else
-				fprintf(stderr, "TFF Render Text Solid Error: init error\n");
-		
-			// Apply message option 1 (New game)
-			if(message != 0)
-				scrnfunk::apply_image(620, 300, message, screen);
-			else
-				fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
-			
-			// Setup exit option (Exit)
-			const char* exit_text = "Exit";
-			font = TTF_OpenFont("bin/CaviarDreams.ttf", 55); // reopen to resize
-			
-			// Apply exit option (Exit)
-			if(font != 0 && option1_text != 0)
-				message = TTF_RenderText_Solid(font, exit_text, blackcolor);
-			else
-				fprintf(stderr, "TFF Render Text Solid Error: init error\n");
-		
-			// Apply exit option (Exit)
-			if(message != 0)
-				scrnfunk::apply_image(620, 370, message, screen);
-			else
-				fprintf(stderr, "TFF Render Text Solid Error: apply error\n");
-			
-			// Remove white around the indicator image
-			scrnfunk::RemoveColor(indicator, 0xFF, 0xFF, 0xFF); // white
-			
-			// Apply starting point of indicator
-			scrnfunk::apply_image(550, 306, indicator, screen);
-		
 			// Update screen with all applied images
 			if(screen != 0)
 				SDL_Flip(screen);
 			else
 				fprintf(stderr, "Couldn't update screen.\n");
-			
-			// Free old surfaces
-			SDL_FreeSurface(background);
-			SDL_FreeSurface(characters);
-			SDL_FreeSurface(message);
-			SDL_FreeSurface(indicator);
 		}
-	
+					
+		// Free old surfaces
+		SDL_FreeSurface(background);
+		SDL_FreeSurface(screen);
+
 		return screen;
 	}
-
-	SDL_Surface *MainMenu_survey(SDL_Surface *screen)
+	
+	SDL_Surface *Movement(SDL_Surface *screen)
 	{
-		// Return values
-		// 1 -- User wants option 1 (start new game)
-		// 2 -- User wants to quit
+		// Movement
+		// D -- Mario move LEFT
+		// A -- Mario move RIGHT
+
+		SDL_Surface *background = NULL;
+		SDL_Surface *mario0 = NULL;
+		//SDL_Surface *mario1 = NULL;
+		//SDL_Surface *mario2 = NULL;
+		SDL_Surface *mario3 = NULL;
+		//SDL_Surface *mario4 = NULL;
+		//SDL_Surface *mario5 = NULL;
+		
+		int x,y;
+		x = 125;
+		y = 520;
+
+		// Image filenames
+		const char *background_image = "bin/stage.bmp";
+		const char *mario_image0 = "bin/IMG0.bmp";
+		//const char *mario_image1 = "bin/IMG1.bmp";
+		//const char *mario_image2 = "bin/IMG2.bmp";
+		const char *mario_image3 = "bin/IMG3.bmp";
+		//const char *mario_image4 = "bin/IMG4.bmp";
+		//const char *mario_image5 = "bin/IMG5.bmp";
+
+		background = scrnfunk::load_image(background_image);
+		mario0 = scrnfunk::load_image(mario_image0);
+		//mario1 = scrnfunk::load_image(mario_image1);
+		//mario2 = scrnfunk::load_image(mario_image2);
+		mario3 = scrnfunk::load_image(mario_image3);
+		//mario4 = scrnfunk::load_image(mario_image4);
+		//mario5 = scrnfunk::load_image(mario_image5);
+		
+		SDL_Rect clip;
+
+		clip.x = x;
+		clip.y = y;
+		clip.w = 100;
+		clip.h = 100;
+
+		scrnfunk::RemoveColor(mario0, 0x00, 0x00, 0xFF); // Blue
+		//scrnfunk::RemoveColor(mario1, 0x00, 0x00, 0xFF); // Blue
+		//scrnfunk::RemoveColor(mario2, 0x00, 0x00, 0xFF); // Blue
+		scrnfunk::RemoveColor(mario3, 0x00, 0x00, 0xFF); // Blue
+		scrnfunk::apply_image(x, y, mario0, screen);
+					
+		if(screen != 0)
+			SDL_Flip(screen);
 
 		SDL_Event event;
 		
-		int menu_option, current;
-		menu_option = current = 1;
-
-		bool option_wanted = false;
-		
-		SDL_Surface *background = NULL;
-		SDL_Surface *indicator = NULL;
-
-		// Image filenames
-		const char *background_image = "bin/stage1.bmp";
-		const char *indicator_image = "bin/indicator.bmp";
-		
-		background = scrnfunk::load_image(background_image);
-		indicator = scrnfunk::load_image(indicator_image);
-		
-		// Remove white around the indicator image
-		scrnfunk::RemoveColor(indicator, 0xFF, 0xFF, 0xFF); // white
-		
-		// Background clipping points
-		SDL_Rect clip[2];
-		
-		// Cover points on the background for option 1
-		clip[0].x = 550;
-		clip[0].y = 306;
-		clip[0].w = 48;
-		clip[0].h = 48;
-		
-		// Cover points on the background for option 2
-		clip[1].x = 550;
-		clip[1].y = 375;
-		clip[1].w = 48;
-		clip[1].h = 48;
-		
-		while(!option_wanted)
+		while(1)
 		{
 			while(SDL_PollEvent(&event))
 			{
-			  
 				if(event.type == SDL_QUIT)
 					return NULL;
-				
+
 				else if(event.type == SDL_KEYDOWN)
 				{
-				  
-					if(event.key.keysym.sym == 274) // down arrow key
-					{
-						if(menu_option < 2) // Less than the max amount of options
-							menu_option++;
+					if(event.key.keysym.sym == SDLK_d) // RIGHT
+					{	
+						scrnfunk::apply_image(x, y, background, screen, &clip); // Cover current Mario
+						x=x+10;
+						clip.x = x;
+						scrnfunk::apply_image(x, y, mario3, screen); // Place new Mario
 					}
-					
-					else if(event.key.keysym.sym == 273) // up arrow key
+					else if(event.key.keysym.sym == SDLK_a) // LEFT
 					{
-						if(menu_option > 1)
-							menu_option--;
+						scrnfunk::apply_image(x, y, background, screen, &clip); // Cover current Mario
+						x=x-10;
+						clip.x = x;
+						scrnfunk::apply_image(x, y, mario3, screen); // Place new Mario
 					}
-					
-					else if(event.key.keysym.sym == 13) // enter key
-						option_wanted = true;
-				}
-
-				
-				
-				if(menu_option != current)
-				{
-					current = menu_option;
-					
-					switch(menu_option)
-					{
-						case 1:
-							scrnfunk::apply_image(550, 306, indicator, screen); // Indicator on option 1
-							scrnfunk::apply_image(550, 375, background, screen, &clip[1]); // Cover option 2
-							break;
-						case 2:
-							scrnfunk::apply_image(550, 375, indicator, screen); // Indicator on option 2
-							scrnfunk::apply_image(550, 306, background, screen, &clip[0]); // Cover option 1
-							break;
-						default:
-							cout << "Error: MainMenu_survey didn't update correctly." << endl;
-							break;
-					}
-					
-							
-					if(screen != 0)
-						SDL_Flip(screen);
-					else
-						fprintf(stderr, "Couldn't update screen.\n");
 				}
 			}
-		}
-		
 			
-		switch(menu_option)
-		{
-			case 1:
-				// User wants to start a new game
-				cout << "Starting new game..." << endl;
-				break;
-			case 2:
-				// User wants to exit the game
-				cout << "Exiting..." << endl;
-				break;
-			default:
-				cout << "Fatal Error: Main Menu option given was unknown." << endl;
-			
+			if(screen != 0)
+				SDL_Flip(screen);
+			else
+				fprintf(stderr, "Couldn't update screen.\n");
 		}
-		
+			
 		return screen;
 	}
-
-
 }

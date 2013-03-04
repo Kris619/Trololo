@@ -7,4 +7,4 @@ else
 endif
 
 all:
-	g++ -Wall main.cpp core.cpp main.h -o Trololo ${INCLUDES} ${SDL_LIBS}
+	g++ -Wall main.cpp core.cpp main.h -o mario ${INCLUDES} ${SDL_LIBS}

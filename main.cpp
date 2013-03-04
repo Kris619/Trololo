@@ -7,10 +7,10 @@ int main(int argc, char* args[])
 	SDL_Surface *screen;
 	
 	// Display main menu
-	screen = scrns::MainMenu();
+	screen = scrns::Stage1();
 	
 	// Main menu keyboard surveying
-	screen = scrns::MainMenu_survey(screen);
+	screen = scrns::Movement(screen);
 	
 	SDL_FreeSurface(screen);
 	return 0;
